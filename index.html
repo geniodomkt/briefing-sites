@@ -312,14 +312,7 @@
   </div>
   <div class="field">
     <label>Já tem cadastro no Google Meu Negócio?</label>
-    <div class="radio-group">
-      <div class="radio-item" onclick="selectRadio(this,'googleNegocio','sim')">
-        <input type="radio" name="googleNegocio" value="sim" /> <label>Sim, já tenho</label>
-      </div>
-      <div class="radio-item" onclick="selectRadio(this,'googleNegocio','nao')">
-        <input type="radio" name="googleNegocio" value="nao" /> <label>Não tenho ainda</label>
-      </div>
-    </div>
+    <input type="text" id="googleNegocio" placeholder="Ex: Sim, já tenho / Não tenho ainda" />
   </div>
   <div class="field">
     <label>Horário de atendimento</label>
@@ -339,25 +332,8 @@
     <p>Selecione os que se aplicam e adicione os seus próprios.</p>
   </div>
   <div class="field">
-    <label>Selecione os serviços que você oferece</label>
-    <div class="servicos-grid" id="servicosGrid">
-      <div class="servico-item" onclick="toggleServico(this)"><input type="checkbox" /><label>Lavagem detalhada</label></div>
-      <div class="servico-item" onclick="toggleServico(this)"><input type="checkbox" /><label>Polimento</label></div>
-      <div class="servico-item" onclick="toggleServico(this)"><input type="checkbox" /><label>Vitrificação / PPF</label></div>
-      <div class="servico-item" onclick="toggleServico(this)"><input type="checkbox" /><label>Higienização interna</label></div>
-      <div class="servico-item" onclick="toggleServico(this)"><input type="checkbox" /><label>Limpeza de estofados</label></div>
-      <div class="servico-item" onclick="toggleServico(this)"><input type="checkbox" /><label>Detalhamento completo</label></div>
-      <div class="servico-item" onclick="toggleServico(this)"><input type="checkbox" /><label>Corte de cabelo</label></div>
-      <div class="servico-item" onclick="toggleServico(this)"><input type="checkbox" /><label>Barba</label></div>
-      <div class="servico-item" onclick="toggleServico(this)"><input type="checkbox" /><label>Manicure / Pedicure</label></div>
-      <div class="servico-item" onclick="toggleServico(this)"><input type="checkbox" /><label>Maquiagem</label></div>
-      <div class="servico-item" onclick="toggleServico(this)"><input type="checkbox" /><label>Consultoria</label></div>
-      <div class="servico-item" onclick="toggleServico(this)"><input type="checkbox" /><label>Delivery / Entrega</label></div>
-    </div>
-  </div>
-  <div class="field">
-    <label>Outros serviços não listados <span class="hint">(separe por vírgula)</span></label>
-    <input type="text" id="outrosServicos" placeholder="Ex: Reforma elétrica, Pintura, Troca de piso..." />
+    <label>Quais serviços ou produtos você oferece? <span class="hint">(liste todos, separados por vírgula)</span></label>
+    <textarea id="servicosTexto" rows="4" placeholder="Ex: Lavagem detalhada, Polimento, Vitrificação, Higienização interna..."></textarea>
   </div>
   <div class="field">
     <label>Qual é o seu serviço / produto mais vendido? <span class="req">*</span></label>
@@ -394,14 +370,7 @@
   </div>
   <div class="field">
     <label>Tem depoimentos de clientes para usar no site? <span class="hint">(pode ser prints do WhatsApp ou Google)</span></label>
-    <div class="radio-group">
-      <div class="radio-item" onclick="selectRadio(this,'depoimentos','sim')">
-        <input type="radio" name="depoimentos" value="sim" /> <label>Sim, tenho e vou enviar</label>
-      </div>
-      <div class="radio-item" onclick="selectRadio(this,'depoimentos','nao')">
-        <input type="radio" name="depoimentos" value="nao" /> <label>Não tenho ainda</label>
-      </div>
-    </div>
+    <input type="text" id="depoimentos" placeholder="Ex: Sim, tenho e vou enviar / Não tenho ainda" />
   </div>
   <div class="form-nav">
     <button class="btn btn-back" onclick="back(4)">← Voltar</button>
@@ -418,14 +387,7 @@
   </div>
   <div class="field">
     <label>Tem logo? <span class="req">*</span></label>
-    <div class="radio-group">
-      <div class="radio-item" onclick="selectRadio(this,'temLogo','sim')">
-        <input type="radio" name="temLogo" value="sim" /> <label>Sim, tenho logo</label>
-      </div>
-      <div class="radio-item" onclick="selectRadio(this,'temLogo','nao')">
-        <input type="radio" name="temLogo" value="nao" /> <label>Não tenho logo</label>
-      </div>
-    </div>
+    <input type="text" id="temLogo" placeholder="Ex: Sim, tenho logo / Não tenho logo" />
   </div>
   <div class="field">
     <label>Cores da sua marca <span class="hint">(ex: azul escuro e laranja)</span></label>
@@ -433,20 +395,7 @@
   </div>
   <div class="field">
     <label>Preferência de estilo visual para o site <span class="req">*</span></label>
-    <div class="radio-group">
-      <div class="radio-item" onclick="selectRadio(this,'estilo','escuro')">
-        <input type="radio" name="estilo" value="escuro" /> <label>🌑 Escuro / Premium</label>
-      </div>
-      <div class="radio-item" onclick="selectRadio(this,'estilo','claro')">
-        <input type="radio" name="estilo" value="claro" /> <label>☀️ Claro / Profissional</label>
-      </div>
-      <div class="radio-item" onclick="selectRadio(this,'estilo','colorido')">
-        <input type="radio" name="estilo" value="colorido" /> <label>🎨 Colorido / Jovem</label>
-      </div>
-      <div class="radio-item" onclick="selectRadio(this,'estilo','surpresa')">
-        <input type="radio" name="estilo" value="surpresa" /> <label>✨ Confio em vocês!</label>
-      </div>
-    </div>
+    <input type="text" id="estilo" placeholder="Ex: Escuro/Premium, Claro/Profissional, Colorido, Confio em vocês..." />
   </div>
   <div class="field">
     <label>Tem algum site de referência que você admira?</label>
@@ -473,15 +422,8 @@
     <input type="url" id="linkFotos" placeholder="https://drive.google.com/..." />
   </div>
   <div class="field">
-    <label>O que você tem disponível para enviar? <span class="hint">(marque todos que se aplicam)</span></label>
-    <div class="check-group">
-      <div class="check-item"><input type="checkbox" id="ck1" /><label for="ck1">Fotos do local / estabelecimento</label></div>
-      <div class="check-item"><input type="checkbox" id="ck2" /><label for="ck2">Fotos dos serviços ou produtos em ação</label></div>
-      <div class="check-item"><input type="checkbox" id="ck3" /><label for="ck3">Foto da equipe ou do dono</label></div>
-      <div class="check-item"><input type="checkbox" id="ck4" /><label for="ck4">Logo em boa qualidade (PNG com fundo transparente é ideal)</label></div>
-      <div class="check-item"><input type="checkbox" id="ck5" /><label for="ck5">Vídeo do serviço ou da empresa</label></div>
-      <div class="check-item"><input type="checkbox" id="ck6" /><label for="ck6">Prints de depoimentos de clientes</label></div>
-    </div>
+    <label>O que você tem disponível para enviar? <span class="hint">(descreva o que tiver)</span></label>
+    <textarea id="materialDisponivel" rows="3" placeholder="Ex: Tenho fotos do local, foto da equipe, logo em PNG e prints de depoimentos de clientes"></textarea>
   </div>
   <div class="form-nav">
     <button class="btn btn-back" onclick="back(6)">← Voltar</button>
@@ -497,26 +439,12 @@
     <p>Últimos detalhes para deixar o site perfeito para você.</p>
   </div>
   <div class="field">
-    <label>Quais seções são obrigatórias no site? <span class="hint">(marque os que quer)</span></label>
-    <div class="check-group">
-      <div class="check-item"><input type="checkbox" id="sec1" /><label for="sec1">Galeria de fotos / portfólio</label></div>
-      <div class="check-item"><input type="checkbox" id="sec2" /><label for="sec2">Depoimentos de clientes</label></div>
-      <div class="check-item"><input type="checkbox" id="sec3" /><label for="sec3">Mapa de localização</label></div>
-      <div class="check-item"><input type="checkbox" id="sec4" /><label for="sec4">Formulário de contato</label></div>
-      <div class="check-item"><input type="checkbox" id="sec5" /><label for="sec5">Perguntas frequentes (FAQ)</label></div>
-      <div class="check-item"><input type="checkbox" id="sec6" /><label for="sec6">Seção de preços / tabela de serviços</label></div>
-    </div>
+    <label>Quais seções são obrigatórias no site? <span class="hint">(liste as que quer)</span></label>
+    <textarea id="secoes" rows="3" placeholder="Ex: Galeria de fotos, Depoimentos de clientes, Mapa de localização, Formulário de contato..."></textarea>
   </div>
   <div class="field">
     <label>Quer um domínio próprio? <span class="hint">(ex: suaempresa.com.br)</span></label>
-    <div class="radio-group">
-      <div class="radio-item" onclick="selectRadio(this,'dominio','sim')">
-        <input type="radio" name="dominio" value="sim" /> <label>Sim, quero domínio próprio</label>
-      </div>
-      <div class="radio-item" onclick="selectRadio(this,'dominio','nao')">
-        <input type="radio" name="dominio" value="nao" /> <label>Não por agora</label>
-      </div>
-    </div>
+    <input type="text" id="dominio" placeholder="Ex: Sim, quero domínio próprio / Não por agora" />
   </div>
   <div class="field">
     <label>Alguma observação, pedido especial ou informação importante que queira nos contar?</label>
@@ -613,22 +541,28 @@ function submitForm() {
     instagram: document.getElementById('instagram').value,
     facebook: document.getElementById('facebook').value,
     email: document.getElementById('email').value,
+    googleNegocio: document.getElementById('googleNegocio').value,
     horario: document.getElementById('horario').value,
-    outrosServicos: document.getElementById('outrosServicos').value,
+    servicos: document.getElementById('servicosTexto').value,
     servicoPrincipal: document.getElementById('servicoPrincipal').value,
     descricao: document.getElementById('descricao').value,
     diferencial: document.getElementById('diferencial').value,
     clienteIdeal: document.getElementById('clienteIdeal').value,
     slogan: document.getElementById('slogan').value,
+    depoimentos: document.getElementById('depoimentos').value,
+    temLogo: document.getElementById('temLogo').value,
     cores: document.getElementById('cores').value,
+    estilo: document.getElementById('estilo').value,
     referencia: document.getElementById('referencia').value,
     linkFotos: document.getElementById('linkFotos').value,
+    materialDisponivel: document.getElementById('materialDisponivel').value,
+    secoes: document.getElementById('secoes').value,
+    dominio: document.getElementById('dominio').value,
     obs: document.getElementById('obs').value,
     timestamp: new Date().toISOString()
   };
 
-  // Montar mensagem para WhatsApp
-  const msg = `*NOVO BRIEFING RECEBIDO* 🎉\n\n*Cliente:* ${dados.nomeContato}\n*Empresa:* ${dados.nomeEmpresa}\n*Segmento:* ${dados.segmento}\n*Cidade:* ${dados.cidade} - ${dados.estado}\n*WhatsApp:* ${dados.whatsapp}\n*Instagram:* ${dados.instagram}\n*Serviço principal:* ${dados.servicoPrincipal}\n*Estilo visual:* ${document.querySelector('[name="estilo"]:checked')?.value || 'não informado'}\n*Link fotos:* ${dados.linkFotos || 'enviar pelo WhatsApp'}\n\nAcesse o briefing completo no painel.`;
+  const msg = `*NOVO BRIEFING RECEBIDO* 🎉\n\n*Cliente:* ${dados.nomeContato}\n*Empresa:* ${dados.nomeEmpresa}\n*Segmento:* ${dados.segmento}\n*Cidade:* ${dados.cidade} - ${dados.estado}\n*WhatsApp:* ${dados.whatsapp}\n*Instagram:* ${dados.instagram}\n*Serviços:* ${dados.servicos}\n*Serviço principal:* ${dados.servicoPrincipal}\n*Estilo visual:* ${dados.estilo || 'não informado'}\n*Link fotos:* ${dados.linkFotos || 'enviar pelo WhatsApp'}\n\nAcesse o briefing completo no painel.`;
 
   // Esconder form, mostrar sucesso
   document.querySelectorAll('.step-section').forEach(s => s.classList.remove('active'));
