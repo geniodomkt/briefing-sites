@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Briefing — Seu Site Profissional</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --navy: #0a1628;
+    --navy2: #0d1f3c;
+    --orange: #e8541a;
+    --orange2: #ff6b35;
+    --white: #f5f5f0;
+    --gray: #6b7280;
+    --border: #dde1e7;
+    --bg: #f8f9fb;
+  }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: #1a1a2e; min-height: 100vh; }
+
+  /* PROGRESS */
+  .progress-bar { position: fixed; top: 0; left: 0; width: 100%; height: 4px; background: #e5e7eb; z-index: 100; }
+  .progress-fill { height: 100%; background: var(--orange); transition: width 0.4s ease; }
+
+  /* HEADER */
+  header {
+    background: var(--navy);
+    padding: 20px 24px;
+    text-align: center;
+    border-bottom: 3px solid var(--orange);
+  }
+  header h1 { color: #fff; font-size: 22px; font-weight: 700; letter-spacing: 0.5px; }
+  header h1 span { color: var(--orange); }
+  header p { color: rgba(255,255,255,0.6); font-size: 14px; margin-top: 4px; }
+
+  /* STEPS NAV */
+  .steps-nav {
+    background: white;
+    border-bottom: 1px solid var(--border);
+    padding: 0 16px;
+    overflow-x: auto;
+    display: flex;
+    gap: 0;
+    white-space: nowrap;
+  }
+  .step-tab {
+    padding: 14px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gray);
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+  .step-tab.active { color: var(--orange); border-bottom-color: var(--orange); }
+  .step-tab.done { color: #16a34a; }
+  .step-tab .step-num {
+    width: 20px; height: 20px; border-radius: 50%;
+    background: #e5e7eb; color: #6b7280;
+    font-size: 11px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .step-tab.active .step-num { background: var(--orange); color: white; }
+  .step-tab.done .step-num { background: #16a34a; color: white; }
+
+  /* MAIN */
+  main { max-width: 720px; margin: 0 auto; padding: 32px 20px 80px; }
+
+  /* STEP SECTION */
+  .step-section { display: none; }
+  .step-section.active { display: block; animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  .step-header { margin-bottom: 32px; }
+  .step-header .step-label {
+    font-size: 12px; font-weight: 700; letter-spacing: 2px;
+    color: var(--orange); text-transform: uppercase; margin-bottom: 8px;
+  }
+  .step-header h2 { font-size: 26px; font-weight: 800; color: var(--navy); line-height: 1.2; }
+  .step-header p { font-size: 15px; color: var(--gray); margin-top: 8px; line-height: 1.6; }
+
+  /* FORM FIELDS */
+  .field { margin-bottom: 24px; }
+  .field label {
+    display: block; font-size: 14px; font-weight: 600;
+    color: #374151; margin-bottom: 8px;
+  }
+  .field label .req { color: var(--orange); }
+  .field label .hint { font-weight: 400; color: var(--gray); font-size: 13px; }
+  input[type="text"], input[type="tel"], input[type="email"], input[type="url"], textarea, select {
+    width: 100%; padding: 12px 14px; border: 1.5px solid var(--border);
+    border-radius: 8px; font-size: 15px; font-family: inherit;
+    color: #1a1a2e; background: white;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+  }
+  input:focus, textarea:focus, select:focus {
+    border-color: var(--orange);
+    box-shadow: 0 0 0 3px rgba(232,84,26,0.1);
+  }
+  textarea { resize: vertical; min-height: 100px; }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  /* CHECKBOXES */
+  .check-group { display: flex; flex-direction: column; gap: 10px; }
+  .check-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 16px; border: 1.5px solid var(--border);
+    border-radius: 8px; cursor: pointer;
+    transition: all 0.2s; background: white;
+  }
+  .check-item:hover { border-color: var(--orange); background: #fff8f5; }
+  .check-item input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--orange); cursor: pointer; }
+  .check-item label { cursor: pointer; font-size: 14px; color: #374151; margin: 0; font-weight: 400; }
+
+  /* RADIO GROUP */
+  .radio-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .radio-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 14px 16px; border: 2px solid var(--border);
+    border-radius: 10px; cursor: pointer;
+    transition: all 0.2s; background: white;
+  }
+  .radio-item:hover { border-color: var(--orange); }
+  .radio-item input { accent-color: var(--orange); width: 16px; height: 16px; cursor: pointer; }
+  .radio-item label { cursor: pointer; font-size: 13px; font-weight: 500; color: #374151; margin: 0; }
+  .radio-item.selected { border-color: var(--orange); background: #fff8f5; }
+
+  /* SERVICOS */
+  .servicos-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .servico-item {
+    padding: 12px 14px; border: 1.5px solid var(--border);
+    border-radius: 8px; cursor: pointer; background: white;
+    display: flex; align-items: center; gap: 10px;
+    transition: all 0.2s;
+  }
+  .servico-item:hover, .servico-item.selected {
+    border-color: var(--orange); background: #fff8f5;
+  }
+  .servico-item input { accent-color: var(--orange); cursor: pointer; }
+  .servico-item label { cursor: pointer; font-size: 13px; color: #374151; margin: 0; }
+
+  /* UPLOAD AREA */
+  .upload-area {
+    border: 2px dashed var(--border); border-radius: 12px;
+    padding: 40px 24px; text-align: center;
+    background: white; cursor: pointer;
+    transition: all 0.2s;
+  }
+  .upload-area:hover { border-color: var(--orange); background: #fff8f5; }
+  .upload-area .upload-icon { font-size: 40px; margin-bottom: 12px; }
+  .upload-area p { color: var(--gray); font-size: 14px; }
+  .upload-area strong { color: var(--orange); }
+  .upload-note { font-size: 13px; color: var(--gray); margin-top: 8px; text-align: center; }
+
+  /* INFO BOX */
+  .info-box {
+    background: #eff6ff; border-left: 4px solid #3b82f6;
+    border-radius: 8px; padding: 14px 18px; margin-bottom: 24px;
+  }
+  .info-box p { font-size: 14px; color: #1e40af; line-height: 1.6; }
+
+  /* NAV BUTTONS */
+  .form-nav {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 40px; padding-top: 24px;
+    border-top: 1px solid var(--border);
+  }
+  .btn {
+    padding: 14px 28px; border-radius: 8px; font-size: 15px;
+    font-weight: 700; cursor: pointer; border: none;
+    transition: all 0.2s; font-family: inherit;
+  }
+  .btn-back {
+    background: white; color: var(--gray);
+    border: 1.5px solid var(--border);
+  }
+  .btn-back:hover { border-color: #9ca3af; color: #374151; }
+  .btn-next {
+    background: var(--orange); color: white;
+    padding: 14px 36px;
+  }
+  .btn-next:hover { background: var(--orange2); transform: translateY(-1px); }
+  .btn-submit {
+    background: #16a34a; color: white;
+    padding: 14px 36px;
+  }
+  .btn-submit:hover { background: #15803d; transform: translateY(-1px); }
+
+  /* SUCCESS */
+  .success-screen {
+    display: none; text-align: center; padding: 60px 24px;
+  }
+  .success-screen.active { display: block; animation: fadeIn 0.5s ease; }
+  .success-icon { font-size: 64px; margin-bottom: 24px; }
+  .success-screen h2 { font-size: 28px; font-weight: 800; color: var(--navy); margin-bottom: 12px; }
+  .success-screen p { color: var(--gray); font-size: 16px; line-height: 1.7; max-width: 480px; margin: 0 auto 24px; }
+  .success-wpp {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: #25D366; color: white;
+    padding: 16px 32px; border-radius: 8px;
+    font-weight: 700; font-size: 16px;
+    text-decoration: none; transition: all 0.2s;
+  }
+  .success-wpp:hover { background: #1ebe5d; transform: translateY(-2px); }
+
+  @media (max-width: 560px) {
+    .field-row, .radio-group, .servicos-grid { grid-template-columns: 1fr; }
+    .step-tab { padding: 12px 12px; font-size: 12px; }
+    main { padding: 24px 16px 80px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:14%"></div></div>
+
+<header>
+  <h1>Formulário de <span>Briefing</span></h1>
+  <p>Tudo que precisamos para criar o seu site profissional 🚀</p>
+</header>
+
+<nav class="steps-nav">
+  <div class="step-tab active" onclick="goTo(1)" id="tab1"><div class="step-num">1</div> Empresa</div>
+  <div class="step-tab" onclick="goTo(2)" id="tab2"><div class="step-num">2</div> Contato</div>
+  <div class="step-tab" onclick="goTo(3)" id="tab3"><div class="step-num">3</div> Serviços</div>
+  <div class="step-tab" onclick="goTo(4)" id="tab4"><div class="step-num">4</div> Sobre</div>
+  <div class="step-tab" onclick="goTo(5)" id="tab5"><div class="step-num">5</div> Visual</div>
+  <div class="step-tab" onclick="goTo(6)" id="tab6"><div class="step-num">6</div> Fotos</div>
+  <div class="step-tab" onclick="goTo(7)" id="tab7"><div class="step-num">7</div> Extras</div>
+</nav>
+
+<main>
+
+<!-- STEP 1 — EMPRESA -->
+<section class="step-section active" id="step1">
+  <div class="step-header">
+    <div class="step-label">Passo 1 de 7</div>
+    <h2>Dados da Empresa</h2>
+    <p>Vamos começar com as informações básicas do seu negócio.</p>
+  </div>
+  <div class="field">
+    <label>Nome completo da empresa <span class="req">*</span></label>
+    <input type="text" id="nomeEmpresa" placeholder="Ex: Barbearia do João" />
+  </div>
+  <div class="field">
+    <label>Nome fantasia <span class="hint">(como aparece para o cliente)</span></label>
+    <input type="text" id="nomeFantasia" placeholder="Ex: Barbearia do João" />
+  </div>
+  <div class="field-row">
+    <div class="field">
+      <label>Segmento / Tipo de negócio <span class="req">*</span></label>
+      <input type="text" id="segmento" placeholder="Ex: Barbearia, Estética automotiva..." />
+    </div>
+    <div class="field">
+      <label>Há quantos anos no mercado?</label>
+      <input type="text" id="anosNoMercado" placeholder="Ex: 3 anos" />
+    </div>
+  </div>
+  <div class="field">
+    <label>Endereço completo <span class="req">*</span></label>
+    <input type="text" id="endereco" placeholder="Rua, número, bairro, cidade — UF" />
+  </div>
+  <div class="field-row">
+    <div class="field">
+      <label>Cidade</label>
+      <input type="text" id="cidade" placeholder="Ex: Belo Horizonte" />
+    </div>
+    <div class="field">
+      <label>Estado</label>
+      <input type="text" id="estado" placeholder="Ex: MG" />
+    </div>
+  </div>
+  <div class="field">
+    <label>CNPJ <span class="hint">(opcional)</span></label>
+    <input type="text" id="cnpj" placeholder="00.000.000/0001-00" />
+  </div>
+  <div class="form-nav">
+    <div></div>
+    <button class="btn btn-next" onclick="next(1)">Continuar →</button>
+  </div>
+</section>
+
+<!-- STEP 2 — CONTATO -->
+<section class="step-section" id="step2">
+  <div class="step-header">
+    <div class="step-label">Passo 2 de 7</div>
+    <h2>Contato e Redes Sociais</h2>
+    <p>Essas informações vão aparecer no site para seus clientes entrarem em contato.</p>
+  </div>
+  <div class="field">
+    <label>WhatsApp principal <span class="req">*</span> <span class="hint">(com DDD)</span></label>
+    <input type="tel" id="whatsapp" placeholder="(31) 99999-9999" />
+  </div>
+  <div class="field-row">
+    <div class="field">
+      <label>Instagram</label>
+      <input type="text" id="instagram" placeholder="@seuperfil" />
+    </div>
+    <div class="field">
+      <label>Facebook</label>
+      <input type="text" id="facebook" placeholder="facebook.com/seuperfil" />
+    </div>
+  </div>
+  <div class="field">
+    <label>E-mail comercial <span class="hint">(opcional)</span></label>
+    <input type="email" id="email" placeholder="contato@suaempresa.com.br" />
+  </div>
+  <div class="field">
+    <label>Já tem cadastro no Google Meu Negócio?</label>
+    <div class="radio-group">
+      <div class="radio-item" onclick="selectRadio(this,'googleNegocio','sim')">
+        <input type="radio" name="googleNegocio" value="sim" /> <label>Sim, já tenho</label>
+      </div>
+      <div class="radio-item" onclick="selectRadio(this,'googleNegocio','nao')">
+        <input type="radio" name="googleNegocio" value="nao" /> <label>Não tenho ainda</label>
+      </div>
+    </div>
+  </div>
+  <div class="field">
+    <label>Horário de atendimento</label>
+    <textarea id="horario" rows="3" placeholder="Ex: Seg a Sex: 8h às 18h&#10;Sábado: 8h às 13h&#10;Domingo: Fechado"></textarea>
+  </div>
+  <div class="form-nav">
+    <button class="btn btn-back" onclick="back(2)">← Voltar</button>
+    <button class="btn btn-next" onclick="next(2)">Continuar →</button>
+  </div>
+</section>
+
+<!-- STEP 3 — SERVICOS -->
+<section class="step-section" id="step3">
+  <div class="step-header">
+    <div class="step-label">Passo 3 de 7</div>
+    <h2>Serviços e Produtos</h2>
+    <p>Selecione os que se aplicam e adicione os seus próprios.</p>
+  </div>
+  <div class="field">
+    <label>Selecione os serviços que você oferece</label>
+    <div class="servicos-grid" id="servicosGrid">
+      <div class="servico-item" onclick="toggleServico(this)"><input type="checkbox" /><label>Lavagem detalhada</label></div>
+      <div class="servico-item" onclick="toggleServico(this)"><input type="checkbox" /><label>Polimento</label></div>
+      <div class="servico-item" onclick="toggleServico(this)"><input type="checkbox" /><label>Vitrificação / PPF</label></div>
+      <div class="servico-item" onclick="toggleServico(this)"><input type="checkbox" /><label>Higienização interna</label></div>
+      <div class="servico-item" onclick="toggleServico(this)"><input type="checkbox" /><label>Limpeza de estofados</label></div>
+      <div class="servico-item" onclick="toggleServico(this)"><input type="checkbox" /><label>Detalhamento completo</label></div>
+      <div class="servico-item" onclick="toggleServico(this)"><input type="checkbox" /><label>Corte de cabelo</label></div>
+      <div class="servico-item" onclick="toggleServico(this)"><input type="checkbox" /><label>Barba</label></div>
+      <div class="servico-item" onclick="toggleServico(this)"><input type="checkbox" /><label>Manicure / Pedicure</label></div>
+      <div class="servico-item" onclick="toggleServico(this)"><input type="checkbox" /><label>Maquiagem</label></div>
+      <div class="servico-item" onclick="toggleServico(this)"><input type="checkbox" /><label>Consultoria</label></div>
+      <div class="servico-item" onclick="toggleServico(this)"><input type="checkbox" /><label>Delivery / Entrega</label></div>
+    </div>
+  </div>
+  <div class="field">
+    <label>Outros serviços não listados <span class="hint">(separe por vírgula)</span></label>
+    <input type="text" id="outrosServicos" placeholder="Ex: Reforma elétrica, Pintura, Troca de piso..." />
+  </div>
+  <div class="field">
+    <label>Qual é o seu serviço / produto mais vendido? <span class="req">*</span></label>
+    <input type="text" id="servicoPrincipal" placeholder="Ex: Polimento + vitrificação em SUVs" />
+  </div>
+  <div class="form-nav">
+    <button class="btn btn-back" onclick="back(3)">← Voltar</button>
+    <button class="btn btn-next" onclick="next(3)">Continuar →</button>
+  </div>
+</section>
+
+<!-- STEP 4 — SOBRE -->
+<section class="step-section" id="step4">
+  <div class="step-header">
+    <div class="step-label">Passo 4 de 7</div>
+    <h2>Sobre a Empresa</h2>
+    <p>Essas informações vão compor o texto do site e ajudar a convencer novos clientes.</p>
+  </div>
+  <div class="field">
+    <label>Descreva seu negócio em 2 ou 3 frases para um novo cliente <span class="req">*</span></label>
+    <textarea id="descricao" rows="4" placeholder="Ex: Somos especializados em estética automotiva de alta qualidade em Contagem/MG. Atendemos carros, motos e SUVs com produtos premium e mão de obra cuidadosa."></textarea>
+  </div>
+  <div class="field">
+    <label>Qual é o seu diferencial? O que te faz melhor que a concorrência? <span class="req">*</span></label>
+    <textarea id="diferencial" rows="3" placeholder="Ex: Usamos apenas produtos de marcas homologadas, atendimento personalizado e entregamos o carro em até 24h."></textarea>
+  </div>
+  <div class="field">
+    <label>Para quem você atende? Descreva seu cliente ideal.</label>
+    <textarea id="clienteIdeal" rows="3" placeholder="Ex: Donos de carros premium que valorizam conservação e aparência do veículo."></textarea>
+  </div>
+  <div class="field">
+    <label>Tem slogan ou frase de impacto da empresa?</label>
+    <input type="text" id="slogan" placeholder="Ex: Seu carro merece o melhor." />
+  </div>
+  <div class="field">
+    <label>Tem depoimentos de clientes para usar no site? <span class="hint">(pode ser prints do WhatsApp ou Google)</span></label>
+    <div class="radio-group">
+      <div class="radio-item" onclick="selectRadio(this,'depoimentos','sim')">
+        <input type="radio" name="depoimentos" value="sim" /> <label>Sim, tenho e vou enviar</label>
+      </div>
+      <div class="radio-item" onclick="selectRadio(this,'depoimentos','nao')">
+        <input type="radio" name="depoimentos" value="nao" /> <label>Não tenho ainda</label>
+      </div>
+    </div>
+  </div>
+  <div class="form-nav">
+    <button class="btn btn-back" onclick="back(4)">← Voltar</button>
+    <button class="btn btn-next" onclick="next(4)">Continuar →</button>
+  </div>
+</section>
+
+<!-- STEP 5 — VISUAL -->
+<section class="step-section" id="step5">
+  <div class="step-header">
+    <div class="step-label">Passo 5 de 7</div>
+    <h2>Identidade Visual</h2>
+    <p>Isso ajuda a criar um site que combine com a cara do seu negócio.</p>
+  </div>
+  <div class="field">
+    <label>Tem logo? <span class="req">*</span></label>
+    <div class="radio-group">
+      <div class="radio-item" onclick="selectRadio(this,'temLogo','sim')">
+        <input type="radio" name="temLogo" value="sim" /> <label>Sim, tenho logo</label>
+      </div>
+      <div class="radio-item" onclick="selectRadio(this,'temLogo','nao')">
+        <input type="radio" name="temLogo" value="nao" /> <label>Não tenho logo</label>
+      </div>
+    </div>
+  </div>
+  <div class="field">
+    <label>Cores da sua marca <span class="hint">(ex: azul escuro e laranja)</span></label>
+    <input type="text" id="cores" placeholder="Ex: Preto, laranja e branco" />
+  </div>
+  <div class="field">
+    <label>Preferência de estilo visual para o site <span class="req">*</span></label>
+    <div class="radio-group">
+      <div class="radio-item" onclick="selectRadio(this,'estilo','escuro')">
+        <input type="radio" name="estilo" value="escuro" /> <label>🌑 Escuro / Premium</label>
+      </div>
+      <div class="radio-item" onclick="selectRadio(this,'estilo','claro')">
+        <input type="radio" name="estilo" value="claro" /> <label>☀️ Claro / Profissional</label>
+      </div>
+      <div class="radio-item" onclick="selectRadio(this,'estilo','colorido')">
+        <input type="radio" name="estilo" value="colorido" /> <label>🎨 Colorido / Jovem</label>
+      </div>
+      <div class="radio-item" onclick="selectRadio(this,'estilo','surpresa')">
+        <input type="radio" name="estilo" value="surpresa" /> <label>✨ Confio em vocês!</label>
+      </div>
+    </div>
+  </div>
+  <div class="field">
+    <label>Tem algum site de referência que você admira?</label>
+    <input type="url" id="referencia" placeholder="https://..." />
+  </div>
+  <div class="form-nav">
+    <button class="btn btn-back" onclick="back(5)">← Voltar</button>
+    <button class="btn btn-next" onclick="next(5)">Continuar →</button>
+  </div>
+</section>
+
+<!-- STEP 6 — FOTOS -->
+<section class="step-section" id="step6">
+  <div class="step-header">
+    <div class="step-label">Passo 6 de 7</div>
+    <h2>Fotos e Vídeos</h2>
+    <p>As fotos são o que mais impressiona os clientes. Quanto mais, melhor!</p>
+  </div>
+  <div class="info-box">
+    <p>📱 <strong>Dica:</strong> As mídias devem ser enviadas pelo WhatsApp ou Google Drive. Use o campo abaixo para compartilhar o link da pasta, ou informe que vai enviar diretamente no WhatsApp.</p>
+  </div>
+  <div class="field">
+    <label>Link da pasta Google Drive com fotos / vídeos <span class="hint">(se tiver)</span></label>
+    <input type="url" id="linkFotos" placeholder="https://drive.google.com/..." />
+  </div>
+  <div class="field">
+    <label>O que você tem disponível para enviar? <span class="hint">(marque todos que se aplicam)</span></label>
+    <div class="check-group">
+      <div class="check-item"><input type="checkbox" id="ck1" /><label for="ck1">Fotos do local / estabelecimento</label></div>
+      <div class="check-item"><input type="checkbox" id="ck2" /><label for="ck2">Fotos dos serviços ou produtos em ação</label></div>
+      <div class="check-item"><input type="checkbox" id="ck3" /><label for="ck3">Foto da equipe ou do dono</label></div>
+      <div class="check-item"><input type="checkbox" id="ck4" /><label for="ck4">Logo em boa qualidade (PNG com fundo transparente é ideal)</label></div>
+      <div class="check-item"><input type="checkbox" id="ck5" /><label for="ck5">Vídeo do serviço ou da empresa</label></div>
+      <div class="check-item"><input type="checkbox" id="ck6" /><label for="ck6">Prints de depoimentos de clientes</label></div>
+    </div>
+  </div>
+  <div class="form-nav">
+    <button class="btn btn-back" onclick="back(6)">← Voltar</button>
+    <button class="btn btn-next" onclick="next(6)">Continuar →</button>
+  </div>
+</section>
+
+<!-- STEP 7 — EXTRAS -->
+<section class="step-section" id="step7">
+  <div class="step-header">
+    <div class="step-label">Passo 7 de 7</div>
+    <h2>Seções e Observações</h2>
+    <p>Últimos detalhes para deixar o site perfeito para você.</p>
+  </div>
+  <div class="field">
+    <label>Quais seções são obrigatórias no site? <span class="hint">(marque os que quer)</span></label>
+    <div class="check-group">
+      <div class="check-item"><input type="checkbox" id="sec1" /><label for="sec1">Galeria de fotos / portfólio</label></div>
+      <div class="check-item"><input type="checkbox" id="sec2" /><label for="sec2">Depoimentos de clientes</label></div>
+      <div class="check-item"><input type="checkbox" id="sec3" /><label for="sec3">Mapa de localização</label></div>
+      <div class="check-item"><input type="checkbox" id="sec4" /><label for="sec4">Formulário de contato</label></div>
+      <div class="check-item"><input type="checkbox" id="sec5" /><label for="sec5">Perguntas frequentes (FAQ)</label></div>
+      <div class="check-item"><input type="checkbox" id="sec6" /><label for="sec6">Seção de preços / tabela de serviços</label></div>
+    </div>
+  </div>
+  <div class="field">
+    <label>Quer um domínio próprio? <span class="hint">(ex: suaempresa.com.br)</span></label>
+    <div class="radio-group">
+      <div class="radio-item" onclick="selectRadio(this,'dominio','sim')">
+        <input type="radio" name="dominio" value="sim" /> <label>Sim, quero domínio próprio</label>
+      </div>
+      <div class="radio-item" onclick="selectRadio(this,'dominio','nao')">
+        <input type="radio" name="dominio" value="nao" /> <label>Não por agora</label>
+      </div>
+    </div>
+  </div>
+  <div class="field">
+    <label>Alguma observação, pedido especial ou informação importante que queira nos contar?</label>
+    <textarea id="obs" rows="4" placeholder="Ex: Quero que o site tenha as cores da minha marca. Tenho um vídeo do estabelecimento para enviar. Gostaria de urgência na entrega..."></textarea>
+  </div>
+  <div class="field">
+    <label>Seu nome (para a gente saber com quem falar) <span class="req">*</span></label>
+    <input type="text" id="nomeContato" placeholder="Seu nome completo" />
+  </div>
+  <div class="form-nav">
+    <button class="btn btn-back" onclick="back(7)">← Voltar</button>
+    <button class="btn btn-submit" onclick="submitForm()">✅ Enviar briefing</button>
+  </div>
+</section>
+
+<!-- SUCCESS -->
+<div class="success-screen" id="successScreen">
+  <div class="success-icon">🎉</div>
+  <h2>Briefing recebido!</h2>
+  <p>Perfeito, <strong id="nomeSucesso"></strong>! Recebemos todas as informações. Nossa equipe vai analisar e entrar em contato em breve para dar início ao seu site.</p>
+  <p style="font-size:14px; color:#9ca3af; margin-top:-8px;">Prazo médio de entrega: <strong>5 a 7 dias úteis</strong> após aprovação do briefing.</p>
+  <a class="success-wpp" href="https://wa.me/5531991411068?text=Oi!%20Acabei%20de%20preencher%20o%20briefing%20do%20site%20😊" target="_blank">
+    💬 Avisar no WhatsApp que enviei
+  </a>
+</div>
+
+</main>
+
+<script>
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxTHJAwfYCkfiEUpf-7kGqIaDSsIueyQ9tTQEwGAPgjbrScmefztIrRgP-R2Lux3uZzVw/exec";
+
+let currentStep = 1;
+const totalSteps = 7;
+const progress = [14, 28, 42, 57, 71, 85, 100];
+
+function goTo(step) {
+  document.querySelectorAll('.step-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.step-tab').forEach(t => t.classList.remove('active'));
+  const target = document.getElementById('step' + step);
+  if (target) {
+    target.classList.add('active');
+    document.getElementById('tab' + step).classList.add('active');
+    document.getElementById('progressFill').style.width = progress[step - 1] + '%';
+    currentStep = step;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+
+function next(step) {
+  if (step < totalSteps) {
+    document.getElementById('tab' + step).classList.add('done');
+    goTo(step + 1);
+  }
+}
+
+function back(step) {
+  if (step > 1) goTo(step - 1);
+}
+
+function selectRadio(el, name, value) {
+  document.querySelectorAll('[name="' + name + '"]').forEach(r => {
+    r.closest('.radio-item').classList.remove('selected');
+    r.checked = false;
+  });
+  el.classList.add('selected');
+  el.querySelector('input').checked = true;
+}
+
+function toggleServico(el) {
+  el.classList.toggle('selected');
+  const cb = el.querySelector('input');
+  cb.checked = !cb.checked;
+}
+
+function submitForm() {
+  const nome = document.getElementById('nomeContato').value.trim();
+  const empresa = document.getElementById('nomeEmpresa').value.trim();
+  if (!nome) { alert('Por favor, informe seu nome antes de enviar.'); return; }
+  if (!empresa) { alert('Por favor, informe o nome da empresa.'); return; }
+
+  // Coletar todos os dados
+  const dados = {
+    nomeContato: nome,
+    nomeEmpresa: empresa,
+    nomeFantasia: document.getElementById('nomeFantasia').value,
+    segmento: document.getElementById('segmento').value,
+    anosNoMercado: document.getElementById('anosNoMercado').value,
+    endereco: document.getElementById('endereco').value,
+    cidade: document.getElementById('cidade').value,
+    estado: document.getElementById('estado').value,
+    cnpj: document.getElementById('cnpj').value,
+    whatsapp: document.getElementById('whatsapp').value,
+    instagram: document.getElementById('instagram').value,
+    facebook: document.getElementById('facebook').value,
+    email: document.getElementById('email').value,
+    horario: document.getElementById('horario').value,
+    outrosServicos: document.getElementById('outrosServicos').value,
+    servicoPrincipal: document.getElementById('servicoPrincipal').value,
+    descricao: document.getElementById('descricao').value,
+    diferencial: document.getElementById('diferencial').value,
+    clienteIdeal: document.getElementById('clienteIdeal').value,
+    slogan: document.getElementById('slogan').value,
+    cores: document.getElementById('cores').value,
+    referencia: document.getElementById('referencia').value,
+    linkFotos: document.getElementById('linkFotos').value,
+    obs: document.getElementById('obs').value,
+    timestamp: new Date().toISOString()
+  };
+
+  // Montar mensagem para WhatsApp
+  const msg = `*NOVO BRIEFING RECEBIDO* 🎉\n\n*Cliente:* ${dados.nomeContato}\n*Empresa:* ${dados.nomeEmpresa}\n*Segmento:* ${dados.segmento}\n*Cidade:* ${dados.cidade} - ${dados.estado}\n*WhatsApp:* ${dados.whatsapp}\n*Instagram:* ${dados.instagram}\n*Serviço principal:* ${dados.servicoPrincipal}\n*Estilo visual:* ${document.querySelector('[name="estilo"]:checked')?.value || 'não informado'}\n*Link fotos:* ${dados.linkFotos || 'enviar pelo WhatsApp'}\n\nAcesse o briefing completo no painel.`;
+
+  // Esconder form, mostrar sucesso
+  document.querySelectorAll('.step-section').forEach(s => s.classList.remove('active'));
+  document.getElementById('tab7').classList.add('done');
+  document.getElementById('progressFill').style.width = '100%';
+  document.getElementById('nomeSucesso').textContent = nome.split(' ')[0];
+  document.getElementById('successScreen').classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // Enviar dados para o Google Apps Script
+  fetch(APPS_SCRIPT_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(dados)
+  })
+  .then(() => console.log('Briefing enviado para o Apps Script com sucesso.'))
+  .catch(err => console.error('Erro ao enviar para Apps Script:', err));
+}
+</script>
+</body>
+</html>
